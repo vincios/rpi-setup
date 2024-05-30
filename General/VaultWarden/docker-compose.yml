@@ -1,0 +1,13 @@
+name: vaultwarden
+
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    env_file:
+      - .env
+    ports:
+      - "8666:80"
+    volumes:
+      - ${DATA_LOCATION:-./vw-data}:/data
+    restart: always
