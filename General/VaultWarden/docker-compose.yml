@@ -7,7 +7,8 @@ services:
     env_file:
       - .env
     ports:
-      - "8666:80"
+      - "127.0.0.1:8666:80"
     volumes:
       - ${DATA_LOCATION:-./vw-data}:/data
+      - ${DATA_LOCATION:-./vw-data}/logs:/data/logs
     restart: always
