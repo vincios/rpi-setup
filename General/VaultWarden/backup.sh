@@ -3,10 +3,11 @@
 # Use the value of the corresponding environment variable, or the
 # default if none exists.
 : ${VAULTWARDEN_ROOT:="$(pwd)"}
+: ${VAULTWARDEN_DATA_FOLDER:="vw-data"}
 : ${SQLITE3:="/usr/bin/sqlite3"}
 
-DATA_DIR="${VAULTWARDEN_ROOT}/vw-data"
-BACKUP_DIR_NAME="vw-data-backup"
+DATA_DIR="${VAULTWARDEN_ROOT}/${VAULTWARDEN_DATA_FOLDER}"
+BACKUP_DIR_NAME="${VAULTWARDEN_DATA_FOLDER}-backup"
 BACKUP_DIR_PATH="${VAULTWARDEN_ROOT}/${BACKUP_DIR_NAME}"
 DB_FILE="db.sqlite3"
 
