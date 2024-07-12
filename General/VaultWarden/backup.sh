@@ -29,6 +29,10 @@ ${SQLITE3} -cmd ".timeout ${busy_timeout}" \
            "file:${DATA_DIR}/${DB_FILE}?mode=ro" \
            ".backup '${BACKUP_DIR_PATH}/${DB_FILE}'"
 
+# We need this to prevent permission issues, since vw creates attachments as root with 600 permission
+# see https://github.com/dani-garcia/vaultwarden/issues/2610#issuecomment-1366795081
+sudo chmod -R go+r ${DATA_DIR}/attachments/.; chmod -R go+r ${DATA_DIR}/sends/.
+
 backup_files=()
 for f in attachments config.json rsa_key.der rsa_key.pem rsa_key.pub.der rsa_key.pub.pem sends; do
     if [[ -e "${DATA_DIR}"/$f ]]; then
