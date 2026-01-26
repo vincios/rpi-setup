@@ -127,5 +127,5 @@ if [[ $CONT =~ ^[Yy]$ ]]
 then
   echo "Enabling..."
   systemctl enable --now $AUTOMOUNT_FILE
-  systemctl is-active --quiet $AUTOMOUNT_FILE && echo "\033[0;32m$AUTOMOUNT_FILE enabled successfully!\033[0m" || echo "\033[0;33An error occurred during enabling! See: systemctl status $MOUNT_FILEm\033[0m"
+  systemctl is-active --quiet $AUTOMOUNT_FILE && echo -e "\033[0;32m$AUTOMOUNT_FILE enabled successfully!\033[0m" || echo -e "\033[0;33An error occurred during enabling! See: systemctl status $MOUNT_FILEm\033[0m"
 fi
