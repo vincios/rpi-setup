@@ -66,7 +66,10 @@ DESC_MOUNT="Mount share $WHAT on $CLEAN_WHERE"
 DESC_AUTOMOUNT="Automount for share $WHAT on $CLEAN_WHERE"
 
 echo "--- Systemd Unit Generation ---"
+echo "Source: $WHAT"
 echo "Target: $CLEAN_WHERE"
+echo "Type: $TYPE"
+echo "Options: $OPTIONS"
 echo -e "  "
 
 echo "Generating files..."
@@ -99,11 +102,6 @@ Where=$CLEAN_WHERE
 WantedBy=multi-user.target
 EOF
 
-echo "Files created in $TARGET_DIR:"
-echo " - $MOUNT_FILE"
-echo " - $AUTOMOUNT_FILE"
-
-echo -e "  "
 echo "Setting permissions..."
 chmod 644 "$TARGET_DIR/$MOUNT_FILE" "$TARGET_DIR/$AUTOMOUNT_FILE"
 
@@ -112,8 +110,12 @@ systemctl daemon-reload
 
 echo -e "  "
 echo -e "\033[0;32mOperation completed successfully!\033[0m"
+echo "Files created in $TARGET_DIR:"
+echo " - $MOUNT_FILE"
+echo " - $AUTOMOUNT_FILE"
+echo -e "  "
 echo "You can now enable the automount with:"
-echo -e "\t \033[0;33msystemctl enable --now $AUTOMOUNT_FILE\033[0m"
+echo -e "  \033[0;33msystemctl enable --now $AUTOMOUNT_FILE\033[0m"
 echo -e "  "
 echo "Also, you can:"
 echo "  - mount the share: systemctl start $MOUNT_FILE"
