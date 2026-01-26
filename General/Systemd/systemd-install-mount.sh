@@ -58,7 +58,7 @@ TARGET_DIR="/etc/systemd/system"
 read -r WHAT WHERE TYPE OPTIONS REST <<< "$1"
 CLEAN_WHERE=$(echo "$WHERE" | sed 's:/*$::')
 
-# Generate filenames [cite: 1, 2]
+# Generate filenames
 MOUNT_FILE=$(systemd-escape --suffix=mount -p "$CLEAN_WHERE")
 AUTOMOUNT_FILE=$(systemd-escape --suffix=automount -p "$CLEAN_WHERE")
 
@@ -97,10 +97,20 @@ Where=$CLEAN_WHERE
 WantedBy=multi-user.target
 EOF
 
-chmod 644 "$TARGET_DIR/$MOUNT_FILE" "$TARGET_DIR/$AUTOMOUNT_FILE"
-systemctl daemon-reload
-
 echo "Files created in $TARGET_DIR:"
 echo " - $MOUNT_FILE"
 echo " - $AUTOMOUNT_FILE"
+
+echo "Setting permissions..."
+chmod 644 "$TARGET_DIR/$MOUNT_FILE" "$TARGET_DIR/$AUTOMOUNT_FILE"
+
+echo "Reloading systemd (daemon-reload)..."
+systemctl daemon-reload
+
 echo "Operation completed successfully."
+echo "You can now enable the automount with:"
+echo "   systemctl enable --now $AUTOMOUNT_FILE"
+
+echo "Also, you can:"
+echo "  - mount the share: systemctl start $MOUNT_FILE"
+echo "  - enable mount on boot: systemctl enable $MOUNT_FILE"
