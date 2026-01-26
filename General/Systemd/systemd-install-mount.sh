@@ -107,14 +107,13 @@ echo -e "  "
 echo "Setting permissions..."
 chmod 644 "$TARGET_DIR/$MOUNT_FILE" "$TARGET_DIR/$AUTOMOUNT_FILE"
 
-echo -e "  "
 echo "Reloading systemd (daemon-reload)..."
 systemctl daemon-reload
 
 echo -e "  "
-echo "\033[0;31mOperation completed successfully!\033[0m"
+echo -e "\033[0;32mOperation completed successfully!\033[0m"
 echo "You can now enable the automount with:"
-echo "   systemctl enable --now $AUTOMOUNT_FILE"
+echo -e "\t \033[0;33msystemctl enable --now $AUTOMOUNT_FILE\033[0m"
 echo -e "  "
 echo "Also, you can:"
 echo "  - mount the share: systemctl start $MOUNT_FILE"
