@@ -118,5 +118,14 @@ echo "You can now enable the automount with:"
 echo -e "  \033[0;33msystemctl enable --now $AUTOMOUNT_FILE\033[0m"
 echo -e "  "
 echo "Also, you can:"
-echo "  - mount the share: systemctl start $MOUNT_FILE"
+echo "  - mount/unmount the share: systemctl start/stop $MOUNT_FILE"
 echo "  - enable mount on boot: systemctl enable $MOUNT_FILE"
+echo -e "  "
+read -p "Enable automount now? [y/n]? " -n 1 -r CONT
+echo
+if [[ $CONT =~ ^[Yy]$ ]]
+then
+  echo "Enabling..."
+  systemctl enable --now $AUTOMOUNT_FILE
+  systemctl is-active --quiet $AUTOMOUNT_FILE && echo "\033[0;32m$AUTOMOUNT_FILE enabled successfully!\033[0m" || echo "\033[0;33An error occurred during enabling! See: systemctl status $MOUNT_FILEm\033[0m"
+fi
