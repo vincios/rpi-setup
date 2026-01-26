@@ -115,7 +115,7 @@ echo -e "  "
 echo "\033[0;31mOperation completed successfully!\033[0m"
 echo "You can now enable the automount with:"
 echo "   systemctl enable --now $AUTOMOUNT_FILE"
-
+echo -e "  "
 echo "Also, you can:"
 echo "  - mount the share: systemctl start $MOUNT_FILE"
 echo "  - enable mount on boot: systemctl enable $MOUNT_FILE"
