@@ -18,11 +18,6 @@ services:
       - ./dynamic:/etc/traefik/dynamic:ro
       - ./static.yml:/etc/traefik/traefik.yml:ro  # Taefik static configuration
     env_file: traefik.env
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "500m"
-        max-file: "2"
 
 networks:
   proxy:
