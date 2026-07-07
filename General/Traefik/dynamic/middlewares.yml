@@ -1,0 +1,11 @@
+http:
+  middlewares:
+    redirect-to-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+    authentication:
+      basicAuth:
+        # See https://doc.traefik.io/traefik/reference/routing-configuration/http/middlewares/basicauth/
+        users:
+          - "user:password-hash"

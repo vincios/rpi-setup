@@ -1,0 +1,24 @@
+http:
+  routers:
+    api-http:
+      rule: Host(`dashboard.{{ env "DUCKDNS_DOMAIN"}}.duckdns.org`)
+      entrypoints:
+        - web
+      service: api@internal
+      middlewares:
+        - redirect-to-https
+    # Overrides the default 'api' router
+    api:
+      rule: Host(`traefik.{{ env "DUCKDNS_DOMAIN"}}.duckdns.org`)
+      entrypoints:
+        - websecure
+        # - traefik  # uncomment to use the :8080 port
+      service: api@internal
+      middlewares:
+        - authentication
+      tls:
+        certResolver: duckdnsResolver
+        domains:
+          - main: '{{ env "DUCKDNS_DOMAIN"}}.duckdns.org'
+            sans:
+              - '*.{{ env "DUCKDNS_DOMAIN"}}.duckdns.org'

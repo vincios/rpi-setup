@@ -1,0 +1,33 @@
+services:
+  # Traefik reverse proxy (automatic TLS via Let's Encrypt)
+  traefik:
+    image: traefik:v3.7
+    container_name: traefik
+    restart: unless-stopped
+    networks:
+      proxy:
+        ipv4_address: 172.30.0.10
+    ports:
+      - '443:443'
+      - '80:80'
+      # - '8080:8080'  # dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./acme:/etc/traefik/acme
+      - ./logs:/var/log/traefik
+      - ./dynamic:/etc/traefik/dynamic:ro
+      - ./static.yml:/etc/traefik/traefik.yml:ro  # Taefik static configuration
+    env_file: traefik.env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "500m"
+        max-file: "2"
+
+networks:
+  proxy:
+    name: proxy
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+          gateway: 172.30.0.1

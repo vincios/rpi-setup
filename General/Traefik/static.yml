@@ -1,0 +1,74 @@
+entryPoints:
+  #  traefik:
+  #    address: ":8080"
+  web:
+    address: ":80"
+    proxyProtocol:
+      insecure: true
+    forwardedHeaders:
+      insecure: true
+  websecure:
+    address: ":443"
+    # Disable timeouts for long-lived gRPC streams (Netbird)
+    transport:
+      respondingTimeouts:
+        readTimeout: 0
+        writeTimeout: 0
+        idleTimeout: 0
+# gRPC transport settings (Netbird)
+serversTransport:
+  forwardingTimeouts:
+    responseHeaderTimeout: 0s
+    idleConnTimeout: 0s
+# Enable ACME (Let's Encrypt): automatic SSL.
+certificatesResolvers:
+  # Use dns-01 challenge with duckdns
+  duckdnsResolver:
+    acme:
+      # Email address used for Let's Encrypt registration.
+      email: YOUR_EMAIL
+
+      # File or key used for certificates storage.
+      # Recommended: give to the file permissions 600
+      storage: "/etc/traefik/acme/acme.json"
+
+      # The certificates' duration in hours.
+      # It defaults to 2160 (90 days) to follow Let's Encrypt certificates' duration.
+      # certificatesDuration: 2160
+
+      # uncomment next line for testing purpose
+      # caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+
+      # With duckdns, we use a DNS-01 ACME challenge
+      # NB: don't forget to set your duckdns token in a DUCKDNS_TOKEN environment variable
+      dnsChallenge:
+        provider: "duckdns" # see https://doc.traefik.io/traefik/https/acme/
+        # resolvers: 8.8.8.8:53,192.168.1.1:53    # uncomment this in case of dns errors
+
+        # Wait x seconds before traefik checks the TXT record
+        delayBeforeCheck: 20
+        propagation:
+          # this should be to false, set to true if the challenge fails due to authorative name servers not reachable
+          disableANSChecks: true 
+
+log:
+  level: "INFO"
+  filePath: "/var/log/traefik/traefik.log"
+accessLog:
+  filePath: "/var/log/traefik/access.log"
+  bufferingSize: 100
+api:
+  # Set to true allows to access the api without HTTPS
+  insecure: true
+  # Enable the dashboard service
+  dashboard: true
+providers:
+  # The traefik dynamic configuration (Routers/Services/Middlewares) is configured with a file provider
+  file:
+    # all the yml files found into this folder will be used as dynamic configuration
+    # so you can split your services configuration in multiple files, one for each service
+    directory: "/etc/traefik/dynamic"
+    watch: true
+  docker:
+    exposedByDefault: false
+    network: proxy

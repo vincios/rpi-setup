@@ -1,0 +1,10 @@
+http:
+  routers:
+    api-http:
+      rule: Host(`raspberrypi.local`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      entrypoints:
+        - web
+        - websecure
+      service: api@internal
+      middlewares:
+        - authentication
