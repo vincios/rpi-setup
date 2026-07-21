@@ -4,7 +4,6 @@ services:
     container_name: crowdsec
     restart: unless-stopped
     # networks: 
-    user: "1000:1000"
     environment:
       GID: "${GID-1000}"
     env_file:
