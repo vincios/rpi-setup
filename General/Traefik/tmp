@@ -3,6 +3,15 @@ entryPoints:
   #    address: ":8080"
   web:
     address: ":80"
+#    proxyProtocol:
+#      insecure: true
+#    forwardedHeaders:
+#      insecure: true
+#    http:
+#      redirections:
+#        entryPoint:
+#          to: websecure
+#          scheme: https
   websecure:
     address: ":443"
     # Disable timeouts for long-lived gRPC streams (Netbird)
@@ -22,7 +31,7 @@ certificatesResolvers:
   duckdnsResolver:
     acme:
       # Email address used for Let's Encrypt registration.
-      email: YOUR_EMAIL
+      email: "vinciosdev@gmail.com"
 
       # File or key used for certificates storage.
       # Recommended: give to the file permissions 600
@@ -45,12 +54,11 @@ certificatesResolvers:
         delayBeforeCheck: 20
         propagation:
           # this should be to false, set to true if the challenge fails due to authorative name servers not reachable
-          disableANSChecks: true 
+          disableANSChecks: true
 
 log:
   level: "INFO"
-  # Default: console log. Uncomment next line to enable file log
-  #  filePath: "/var/log/traefik/traefik.log"
+#  filePath: "/var/log/traefik/traefik.log"
 accessLog:
   filePath: "/var/log/traefik/access.log"
   bufferingSize: 100
