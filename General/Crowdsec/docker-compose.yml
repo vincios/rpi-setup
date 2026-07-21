@@ -1,0 +1,24 @@
+services:
+  crowdsec:
+    image: crowdsecurity/crowdsec
+    container_name: crowdsec
+    restart: unless-stopped
+    # networks: 
+    user: "1000:1000"
+    environment:
+      GID: "${GID-1000}"
+    env_file:
+      - ./crowdsec.env
+    volumes:
+      - ./crowdsec:/etc/crowdsec
+      - crowdsec_db:/var/lib/crowdsec/data
+    healthcheck:
+      test: ["CMD", "cscli", "lapi", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+    labels:
+      - traefik.enable=false
+
+volumes:
+  crowdsec_db:
