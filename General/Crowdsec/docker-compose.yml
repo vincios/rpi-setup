@@ -23,7 +23,7 @@ services:
     environment:
       GID: "${GID-1000}"
     env_file:
-      - ./crowdsec.env
+      - ./.env
     healthcheck:
       test: ["CMD", "cscli", "lapi", "status"]
       interval: 10s
