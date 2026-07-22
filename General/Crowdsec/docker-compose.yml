@@ -1,23 +1,36 @@
 services:
+
   crowdsec:
-    image: crowdsecurity/crowdsec
+    image: crowdsecurity/crowdsec:latest
     container_name: crowdsec
+    # Uncomment the next line if you have already configured Traefik and the 'proxy' network
+    # networks: [proxy] 
     restart: unless-stopped
-    # networks: 
+    ports:
+      - 127.0.0.1:9876:8080 # port mapping for local firewall bouncers
+    expose:
+      - 8080 # http api for bouncers
+      - 7422 # appsec waf endpoint
+      # - 6060 # metrics endpoint for prometheus
+    volumes:
+      # crowdsec container data
+      - ./crowdsec:/etc/crowdsec
+      - crowdsec_db:/var/lib/crowdsec/data
+      # log bind mounts into crowdsec
+      - /var/log/auth.log:/var/log/auth.log:ro
+      - /var/log/syslog:/var/log/syslog:ro
+      - ${TRAEFIK_LOGS_FOLDER:-/var/log/traefik}:/var/log/traefik:ro  # Traefik integration
     environment:
       GID: "${GID-1000}"
     env_file:
       - ./crowdsec.env
-    volumes:
-      - ./crowdsec:/etc/crowdsec
-      - crowdsec_db:/var/lib/crowdsec/data
     healthcheck:
       test: ["CMD", "cscli", "lapi", "status"]
       interval: 10s
       timeout: 5s
       retries: 15
-    labels:
-      - traefik.enable=false
 
-volumes:
-  crowdsec_db:
+# Uncomment next lines if you have already configured Traefik and the 'proxy' network
+# networks:
+#   proxy:
+#     external: true
