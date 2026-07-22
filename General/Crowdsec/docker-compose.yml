@@ -30,6 +30,9 @@ services:
       timeout: 5s
       retries: 15
 
+volumes:
+  crowdsec_db:
+
 # Uncomment next lines if you have already configured Traefik and the 'proxy' network
 # networks:
 #   proxy:
