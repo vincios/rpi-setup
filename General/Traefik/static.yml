@@ -47,7 +47,7 @@ certificatesResolvers:
 
         propagation:
           # Wait x seconds before traefik checks the TXT record
-          delayBeforeCheck: 20
+          delayBeforeChecks: 20s
           # this should be to false, set to true if the challenge fails due to authorative name servers not reachable
           disableANSChecks: true 
 
