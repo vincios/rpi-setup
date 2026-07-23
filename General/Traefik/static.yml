@@ -11,6 +11,9 @@ entryPoints:
         readTimeout: 0
         writeTimeout: 0
         idleTimeout: 0
+    http:
+      middlewares:
+        - rate-limit@file
 # gRPC transport settings (Netbird)
 serversTransport:
   forwardingTimeouts:

@@ -4,6 +4,12 @@ http:
       redirectScheme:
         scheme: https
         permanent: true
+    # rate limiting
+    rate-limit:
+      rateLimit:
+        average: 50
+        period: 1s
+        burst: 100
     authentication:
       basicAuth:
         # See https://doc.traefik.io/traefik/reference/routing-configuration/http/middlewares/basicauth/
