@@ -44,9 +44,10 @@ certificatesResolvers:
         provider: "duckdns" # see https://doc.traefik.io/traefik/https/acme/
         # resolvers: 8.8.8.8:53,192.168.1.1:53    # uncomment this in case of dns errors
 
-        # Wait x seconds before traefik checks the TXT record
-        delayBeforeCheck: 20
+
         propagation:
+          # Wait x seconds before traefik checks the TXT record
+          delayBeforeCheck: 20
           # this should be to false, set to true if the challenge fails due to authorative name servers not reachable
           disableANSChecks: true 
 
