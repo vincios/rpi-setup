@@ -1,0 +1,49 @@
+http:
+  routers:
+    # We split the http router (my-router-http) from the https router (my-router) to better handle the cases where we need a http connection
+    # But in most cases, the http router doesn't need to be touched, since it simply redirects to the https router (where all the router configuration must be set). Just set its 'rule' and 'service' parameters.
+    my-router-http:  # TODO: change the router name
+      rule: Host(`new-service.{{ env "DUCKDNS_DOMAIN"}}.duckdns.org`)  # TODO: set the rule
+      # OR rule: (Host(`{{ env "DUCKDNS_DOMAIN"}}.duckdns.org`) && PathPrefix(`/new-service`))
+      entrypoints:
+        - web
+      middlewares:
+        - redirect-to-https
+      service: "my-service"  # TODO: set the service name
+
+    my-router:  # TODO: change the router name
+      rule: Host(`new-service.{{ env "DUCKDNS_DOMAIN"}}.duckdns.org`)  # TODO: set the rule
+      # OR rule: (Host(`{{ env "DUCKDNS_DOMAIN"}}.duckdns.org`) && PathPrefix(`/new-service`))
+      entrypoints:
+        - websecure
+
+      service: "my-service"  # TODO: set the service name
+
+      # Middlewares to which the request will be forwarded when the route is activated
+      # Optional
+      middlewares:
+        - "authentication"
+        - "my-local-middleware"
+      
+      # Enable the TLS encryption
+      # Normally, you should not need to edit this section
+      tls:
+        certResolver: "duckdnsResolver"
+        domains:
+          - main: '{{ env "DUCKDNS_DOMAIN"}}.duckdns.org'
+            sans:
+              - '*.{{ env "DUCKDNS_DOMAIN"}}.duckdns.org'
+      
+  # Service's urls where the request will be forwarded
+  services:
+    my-service:  # TODO: change the service name
+      loadBalancer:
+        servers:
+        - url: "http://<private-ip-server-1>:<private-port-server-1>/"  # TODO: set the server url
+
+  # Local middlewares (i.e. middlewares that will be used only by my-router)
+  # Optional
+  middlewares:
+    my-local-middleware:
+      addPrefix:
+        prefix: "/foo"
