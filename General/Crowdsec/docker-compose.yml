@@ -3,8 +3,11 @@ services:
   crowdsec:
     image: crowdsecurity/crowdsec:latest
     container_name: crowdsec
-    # Uncomment the next line if you have already configured Traefik and the 'proxy' network
-    # networks: [proxy] 
+    networks: 
+      crowdsec:
+        ipv4_address: 172.28.0.10
+      # Uncomment the next line if you have already configured Traefik and the 'proxy' network
+      # proxy:
     restart: unless-stopped
     ports:
       - 127.0.0.1:8080:8080 # port mapping for local firewall bouncers
@@ -33,7 +36,13 @@ services:
 volumes:
   crowdsec_db:
 
+networks:
+  crowdsec:
+    name: crowdsec
+    ipam:
+      config:
+        - subnet: 172.28.0.0/24
+          gateway: 172.28.0.1
 # Uncomment next lines if you have already configured Traefik and the 'proxy' network
-# networks:
 #   proxy:
 #     external: true
