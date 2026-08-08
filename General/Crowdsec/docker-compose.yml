@@ -19,6 +19,7 @@ services:
     volumes:
       # crowdsec container data
       - ./crowdsec:/etc/crowdsec
+      - crowdsec_data:/var/lib/crowdsec/data
       # log bind mounts into crowdsec
       - /var/log/auth.log:/var/log/auth.log:ro
       - /var/log/syslog:/var/log/syslog:ro
@@ -54,6 +55,7 @@ secrets:
     file: ./secrets/pg_password.txt
 
 volumes:
+  crowdsec_data:
   crowdsec_db:
 
 networks:
