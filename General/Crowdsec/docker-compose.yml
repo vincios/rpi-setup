@@ -1,5 +1,4 @@
 services:
-
   crowdsec:
     image: crowdsecurity/crowdsec:latest
     container_name: crowdsec
@@ -9,6 +8,8 @@ services:
       # Uncomment the next line if you have already configured Traefik and the 'proxy' network
       # proxy:
     restart: unless-stopped
+    depends_on:
+      - database
     ports:
       - 127.0.0.1:8080:8080 # port mapping for local firewall bouncers
     expose:
@@ -18,7 +19,6 @@ services:
     volumes:
       # crowdsec container data
       - ./crowdsec:/etc/crowdsec
-      - crowdsec_db:/var/lib/crowdsec/data
       # log bind mounts into crowdsec
       - /var/log/auth.log:/var/log/auth.log:ro
       - /var/log/syslog:/var/log/syslog:ro
@@ -32,6 +32,26 @@ services:
       interval: 10s
       timeout: 5s
       retries: 15
+
+  database:
+    image: postgres:latest
+    container_name: crowdsec_database
+    restart: unless-stopped
+    networks: [crowdsec]
+    expose:
+      - '5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD_FILE=/run/secrets/pg_password
+      - POSTGRES_DB=crowdsec
+    volumes:
+      - crowdsec_db:/var/lib/postgresql
+    secrets:
+      - pg_password
+
+secrets:
+  pg_password:
+    file: ./secrets/pg_password.txt
 
 volumes:
   crowdsec_db:
