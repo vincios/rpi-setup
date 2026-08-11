@@ -8,7 +8,7 @@
 : ${IMMICH_POSTGRES_USER:="postgres"}
 
 IMMICH_VERSION=$(docker exec -t immich_server immich --version | tr -d '\r' || "n.a.")
-POSTGRES_VERSION=$(docker exec immich_postgres psql -U postgres -c "SELECT version();" | grep PostgreSQL | cut -d " " -f 3 || "n.a.")
+POSTGRES_VERSION=$(docker exec ${IMMICH_POSTGRES_CONTAINER} psql -U postgres -c "SELECT version();" | grep PostgreSQL | cut -d " " -f 3 || "n.a.")
 
 BACKUP_DIR_PATH="${IMMICH_ROOT}/data-backups"
 BACKUP_FILE_NAME="immich-database-${IMMICH_VERSION}-${POSTGRES_VERSION}.sql"
