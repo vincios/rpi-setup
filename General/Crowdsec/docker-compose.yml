@@ -25,7 +25,8 @@ services:
       - /var/log/syslog:/var/log/syslog:ro
       - ${TRAEFIK_LOGS_FOLDER:-/var/log/traefik}:/var/log/traefik:ro  # Traefik integration
     environment:
-      GID: "${GID-1000}"
+      - TZ=Europe/Rome
+      - GID=${GID-1000}
     env_file:
       - ./.env
     healthcheck:
