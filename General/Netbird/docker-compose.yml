@@ -5,6 +5,8 @@ services:
     container_name: netbird-dashboard
     restart: unless-stopped
     networks: [proxy, netbird]
+    environment:
+      - TZ=Europe/Rome
     env_file:
       - ./dashboard.env
     labels:
@@ -30,6 +32,8 @@ services:
     networks: [proxy, netbird]
     depends_on:
       - database
+    environment:
+      - TZ=Europe/Rome
     ports:
       - '3478:3478/udp'
     volumes:
@@ -69,6 +73,8 @@ services:
     networks: [proxy, netbird]
     depends_on:
       - netbird-server  # Use "management" for multi-container setup
+    environment:
+      - TZ=Europe/Rome
     env_file:
       - ./proxy.env
     volumes:
