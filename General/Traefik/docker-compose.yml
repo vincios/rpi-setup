@@ -18,6 +18,8 @@ services:
       - ./dynamic:/etc/traefik/dynamic:ro
       - ./static.yml:/etc/traefik/traefik.yml:ro  # Taefik static configuration
     env_file: traefik.env
+    environment:
+      - TZ=Europe/Rome
 
 networks:
   proxy:
