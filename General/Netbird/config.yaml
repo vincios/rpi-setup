@@ -11,7 +11,7 @@ server:
   logLevel: "info"
   logFile: "console"
 
-  authSecret: "your-auth-secret-here"
+  authSecret: "YOUR-AUTH-SECRET-HERE"
   dataDir: "/var/lib/netbird"
 
   auth:
@@ -29,11 +29,11 @@ server:
 
   store:
     engine: "postgres"
-    dsn: "host=database user=postgres password=your-password-here dbname=netbird_data port=5432"
-    encryptionKey: "your-encryption-key-here"
+    dsn: "host=database user=postgres password=YOUR-PASSWORD-HERE dbname=netbird_data port=5432"
+    encryptionKey: "YOUR-ENCRYPTION-KEY-HERE"
   authStore:
     engine: "postgres"
-    dsn: "host=database port=5432 user=postgres password=your-password-here dbname=netbird_auth sslmode=disable"
+    dsn: "host=database port=5432 user=postgres password=YOUR-PASSWORD-HERE dbname=netbird_auth sslmode=disable"
   activityStore:
     engine: "postgres"
-    dsn: "host=database port=5432 user=postgres password=your-password-here dbname=netbird_events sslmode=disable"
+    dsn: "host=database port=5432 user=postgres password=YOUR-PASSWORD-HERE dbname=netbird_events sslmode=disable"
