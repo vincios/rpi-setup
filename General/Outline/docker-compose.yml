@@ -1,0 +1,70 @@
+services:
+  outline:
+    container_name: outline_server
+    image: docker.getoutline.com/outlinewiki/outline:latest
+    env_file: ./.env
+    ports:
+      - "3000:3000"
+    volumes:
+      # - storage-data:/var/lib/outline/data
+      - ${FILE_STORAGE_LOCATION}:/var/lib/outline/data
+    secrets:
+      - smtp_password
+      - outline_secret_key
+      - outline_utils_secret
+      - google_client_id
+      - google_client_secret
+    depends_on:
+      - postgres
+      - redis
+
+  redis:
+    container_name: outline_redis
+    image: redis
+    expose:
+      - "6379"
+    # volumes:
+    #  - ./redis.conf:/redis.conf
+    command: ["redis-server", "/redis.conf"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 30s
+      retries: 3
+
+  postgres:
+    container_name: outline_postgres
+    image: postgres:18
+    expose:
+      - "5432"
+    volumes:
+      - database-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "outline", "-U", "postgres"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/pg_password.txt
+      POSTGRES_DB: outline
+    secrets:
+      - pg_password
+
+volumes:
+  https-portal-data:
+  database-data:
+
+secrets:
+  pg_password:
+    file: ./secrets/pg_password.txt
+  smtp_password:
+    file: ./secrets/smtp_password.txt
+  outline_secret_key:
+    file: ./secrets/outline_secret_key.txt
+  outline_utils_secret:
+    file: ./secrets/outline_utils_secret.txt
+  google_client_id:
+    file: ./secrets/google_client_id.txt
+  google_client_secret:
+    file: ./secrets/google_client_secret.txt
