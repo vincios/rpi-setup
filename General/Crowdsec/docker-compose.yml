@@ -34,6 +34,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 15
+    logging:
+      driver: "local"
+      options:
+        max-size: "500m"
+        max-file: "3"
 
   database:
     image: postgres:latest
@@ -50,6 +55,11 @@ services:
       - database:/var/lib/postgresql
     secrets:
       - pg_password
+    logging:
+      driver: "local"
+      options:
+        max-size: "500m"
+        max-file: "3"
 
 secrets:
   pg_password:
